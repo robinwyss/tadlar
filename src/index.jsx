@@ -9,23 +9,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-
-import store from './store';
+import { PersistGate } from 'redux-persist/es/integration/react'
+import { configureStore } from './store';
 // hot reload for development
 import { AppContainer } from 'react-hot-loader';
-
 import App from './App';
-
 import './style.scss';
+
+const { store, persistor } = configureStore();
 
 const root = document.getElementById('root');
 
 const render = (Component) => {
   ReactDOM.render(
     <Provider store={store}>
-      <AppContainer>
-        <Component />
-      </AppContainer>
+      <PersistGate persistor={persistor}>
+        <AppContainer>
+          <Component />
+        </AppContainer>
+      </PersistGate>
     </Provider>,
     root,
   );
