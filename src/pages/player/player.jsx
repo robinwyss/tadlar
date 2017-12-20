@@ -2,42 +2,50 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Blur from 'react-blur';
 import { withRouter } from "react-router-dom"
-import { Grid } from 'semantic-ui-react';
+import { Grid, Icon } from 'semantic-ui-react';
+import { getCurrentlyPlaying } from '../../api/spotify'
 
 class Player extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { active: false }
+    this.state = { loading: true }
   }
 
   componentDidMount() {
-    var headers = new Headers();
-    headers.append("Authorization", "Bearer " + this.props.token);
-    fetch("https://api.spotify.com/v1/me/player/currently-playing", {
-      headers
-    }).then((response) => {
-      if (response.status === 200) {
-        return response.json();
-      } else if (response.status === 401) {
-        throw "Unauthorized";
-      }
-    }).then((data) => {
-      this.setState({ active: true, playing: data.is_playing, track: data.item });
-    }, () => {
-      this.props.history.push('/');
+    getCurrentlyPlaying(this.props.token).then((data) => {
+      this.setState({ loading: false, active: true, playing: data.is_playing, track: data.item });
     });
   }
 
   render() {
-    if (this.state.active) {
-      return this.renderPlayer();
+    return (
+      <Grid
+        textAlign='center'
+        style={{ height: '100%' }}
+        verticalAlign='middle'>
+        <Grid.Column style={{ maxWidth: 450 }}>
+          {this.renderPlayer()}
+        </Grid.Column>
+      </Grid>
+    );
+  }
+
+  renderPlayer() {
+    if (this.state.loading) {
+      return this.renderLoading();
+    } else if (this.state.active) {
+      return this.renderTrack();
     } else {
       return this.renderIdlePlayer();
     }
   }
 
-  renderPlayer() {
+  renderLoading() {
+    return (<Icon name="spinner" size="massive" rotated="clockwise"/>)
+  }
+
+  renderTrack() {
     var track = this.state.track;
     var img = track.album.images.find((element) => {
       return element.height < (window.innerHeight / 2) &&
@@ -48,8 +56,8 @@ class Player extends Component {
       <Grid
         textAlign='center'
         style={{ height: '100%' }}
-        verticalAlign='middle'
-      ><Grid.Column style={{ maxWidth: 450 }}>
+        verticalAlign='middle'>
+        <Grid.Column style={{ maxWidth: 450 }}>
           <div>
             <img src={img.url} />
             <h2>{track.name}</h2>

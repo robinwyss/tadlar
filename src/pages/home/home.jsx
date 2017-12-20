@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Grid, Icon } from 'semantic-ui-react';
 
 export class Home extends Component {
 
@@ -18,11 +19,20 @@ export class Home extends Component {
 
   render() {
     return (
-      <div>
-        <button onClick={this.login}>
-          <h2>Login to Spotify</h2>
-        </button>
-      </div>
+      <Grid
+      textAlign='center'
+      style={{ height: '100%' }}
+      verticalAlign='middle'>
+        <Grid.Column style={{ maxWidth: 450 }}>
+          <div>
+          <a onClick={this.login}>
+            <Icon name="spotify" size="massive" />
+            <h2>Login to Spotify</h2>
+          </a>
+        </div>
+      </Grid.Column>
+    </Grid>
+      
     );
   }
 }
