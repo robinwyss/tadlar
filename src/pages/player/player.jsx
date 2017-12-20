@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Blur from 'react-blur';
+import { withRouter } from "react-router-dom"
+import { Grid } from 'semantic-ui-react';
 
 class Player extends Component {
 
@@ -17,9 +19,13 @@ class Player extends Component {
     }).then((response) => {
       if (response.status === 200) {
         return response.json();
+      } else if (response.status === 401) {
+        throw "Unauthorized";
       }
     }).then((data) => {
       this.setState({ active: true, playing: data.is_playing, track: data.item });
+    }, () => {
+      this.props.history.push('/');
     });
   }
 
@@ -38,13 +44,19 @@ class Player extends Component {
         element.width < (window.innerWidth / 2)
     });
 
-
     return (
-      <div>
-        <img src={img.url} />
-        <h2>{track.name}</h2>
-        <h3>{this.renderArtists(track.artists)}</h3>
-      </div>
+      <Grid
+        textAlign='center'
+        style={{ height: '100%' }}
+        verticalAlign='middle'
+      ><Grid.Column style={{ maxWidth: 450 }}>
+          <div>
+            <img src={img.url} />
+            <h2>{track.name}</h2>
+            <h3>{this.renderArtists(track.artists)}</h3>
+          </div>
+        </Grid.Column>
+      </Grid>
     );
   }
 
@@ -67,5 +79,5 @@ function mapStateToProps(state) {
   return { token: state.authentication.credentials.accessToken }
 }
 
-const playerWithConnect = connect(mapStateToProps)(Player)
+const playerWithConnect = withRouter(connect(mapStateToProps)(Player))
 export { playerWithConnect as Player }

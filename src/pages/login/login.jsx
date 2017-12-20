@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { authConstants } from '../../constants'
 import { connect } from 'react-redux';
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 class Login extends Component {
   componentDidMount() {
@@ -19,7 +19,7 @@ class Login extends Component {
       type: authConstants.LOGIN,
       credentials
     });
-    this.props.history.push('/player')
+    this.props.history.push('/player');
   }
 
   render() {
