@@ -4,6 +4,7 @@ import Blur from 'react-blur';
 import { withRouter } from "react-router-dom"
 import { Grid, Icon } from 'semantic-ui-react';
 import { getCurrentlyPlaying } from '../../api/spotify'
+import { spotifyConstants } from '../../constants'
 
 class Player extends Component {
 
@@ -13,12 +14,24 @@ class Player extends Component {
   }
 
   componentDidMount() {
+    var self = this;
     getCurrentlyPlaying(this.props.token).then((data) => {
-      this.setState({ loading: false, active: true, playing: data.is_playing, track: data.item });
+      self.props.dispatch({
+        type: spotifyConstants.PLAYBACK_UPDATE,
+        playbackInfo: data
+      });
     });
+
   }
 
+  componentWillReceiveProps(newProps){
+    if (newProps.playbackInfo) {
+      this.setState({ loading: false, active: true, playing: this.props.playbackInfo.is_playing, track: this.props.playbackInfo.item });
+    }
+ }
+
   render() {
+
     return (
       <Grid
         textAlign='center'
@@ -42,7 +55,7 @@ class Player extends Component {
   }
 
   renderLoading() {
-    return (<Icon name="spinner" size="massive" rotated="clockwise"/>)
+    return (<Icon name="spinner" size="massive" rotated="clockwise" />)
   }
 
   renderTrack() {
@@ -84,7 +97,11 @@ class Player extends Component {
 }
 
 function mapStateToProps(state) {
-  return { token: state.authentication.credentials.accessToken }
+  var playbackInfo = state.spotify ? state.spotify.playbackInfo : undefined;
+  return {
+    token: state.authentication.credentials.accessToken,
+    playbackInfo
+  }
 }
 
 const playerWithConnect = withRouter(connect(mapStateToProps)(Player))

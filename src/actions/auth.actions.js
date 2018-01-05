@@ -14,6 +14,6 @@ const login = (credentials) => {
 
 const logout = () => {
     return {
-        type: autConstants.logout
+        type: autConstants.LOGOUT
     };
 }

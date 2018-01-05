@@ -1,1 +1,2 @@
-export * from './auth.actions.js'
+export * from './auth.actions'
+export * from './spotify.actions'
