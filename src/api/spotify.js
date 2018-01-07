@@ -8,7 +8,11 @@ export const getCurrentlyPlaying = (token) => {
         headers
     }).then((response) => {
         if (response.ok) {
-            return response.json();
+            if(response.status === 204){
+                return {};
+            } else {
+                return response.json();
+            }
         } else if (response.status === 401) {
             window.location = '/';
         } else {
