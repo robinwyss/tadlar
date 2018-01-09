@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Blur from 'react-blur';
 import { withRouter } from "react-router-dom"
-import { Grid, Icon, Progress, Segment } from 'semantic-ui-react';
+import { Grid, Icon, Progress, Segment, Loader } from 'semantic-ui-react';
 import { getCurrentlyPlaying } from '../../api/spotify'
 import { spotifyConstants } from '../../constants'
 import _ from 'lodash'
@@ -63,7 +63,7 @@ class Player extends Component {
       style={{ height: '100%' }}
       verticalAlign='middle'>
       <Grid.Column style={{ maxWidth: 450 }}>
-        <Icon name="spinner" size="massive" rotated="clockwise" />
+        <Loader />
       </Grid.Column>
     </Grid>)
   }
@@ -89,11 +89,7 @@ class Player extends Component {
             </div>
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row columns={1}>
-          <Grid.Column style={{ width: '100%' }}>
-            {this.renderTrackStatus(track)}
-          </Grid.Column>
-        </Grid.Row>
+        {this.renderTrackStatus(track)}
       </Grid>
     );
   }
@@ -107,11 +103,14 @@ class Player extends Component {
   renderTrackStatus(track) {
     var progress = ((this.state.track.progress_ms + this.state.progress_ms_offset) / this.state.track.item.duration_ms) * 100;
 
-    return (<Segment>
-      <Progress percent={progress} attached='top' />
-      <Icon name={this.state.playing ? 'play' : 'pause'} size="large" />
-      <Progress percent={progress} attached='bottom' />
-    </Segment>)
+    return (<Grid.Row columns={1}>
+      <Grid.Column style={{ width: '100%' }}>
+        <Icon name={this.state.playing ? 'play' : 'pause'} size="large" />
+      </Grid.Column>
+      <Grid.Column style={{ width: '100%' }}>
+        <Progress percent={progress} active={this.state.playing} size="small" />
+      </Grid.Column>
+    </Grid.Row>)
   }
 
   renderIdlePlayer() {
