@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
 import Blur from 'react-blur';
 import { withRouter } from "react-router-dom"
 import { Grid, Icon, Progress, Segment, Loader } from 'semantic-ui-react';
 import { getCurrentlyPlaying } from '../../api/spotify'
 import { spotifyConstants } from '../../constants'
 import _ from 'lodash'
+import { spotifyActions } from '../../actions'
 
 class Player extends Component {
 
@@ -17,10 +19,7 @@ class Player extends Component {
   componentDidMount() {
     var self = this;
     getCurrentlyPlaying(this.props.token).then((data) => {
-      self.props.dispatch({
-        type: spotifyConstants.PLAYBACK_UPDATE,
-        playbackInfo: data
-      });
+      self.props.updatePlaybackStatus(data);
     });
   }
 
@@ -133,5 +132,11 @@ function mapStateToProps(state) {
   }
 }
 
-const playerWithConnect = withRouter(connect(mapStateToProps)(Player))
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    updatePlaybackStatus: spotifyActions.updatePlaybackStatus
+  }, dispatch);
+}
+
+const playerWithConnect = withRouter(connect(mapStateToProps, mapDispatchToProps)(Player))
 export { playerWithConnect as Player }
