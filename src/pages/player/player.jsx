@@ -17,33 +17,40 @@ class Player extends Component {
   }
 
   componentDidMount() {
-    var self = this;
-    getCurrentlyPlaying(this.props.token).then((data) => {
-      self.props.updatePlaybackStatus(data);
-    });
+    this.updateCurrentlyPlaying();
+    this.updateInterval = setInterval(this.updateCurrentlyPlaying.bind(this), 5000);
   }
 
-  componentDidUpdate() {
-    if (this.state.playing) {
-      setTimeout(function () {
-        this.setState({ progress_ms_offset: this.state.progress_ms_offset + 500 });
-      }.bind(this), 500);
-    }
+  componentWillUnmount() {
+    clearInterval(this.updateInterval)
   }
-
 
   componentWillReceiveProps(newProps) {
+    clearInterval(this.progressInterval);
     if (_.isEmpty(newProps.playbackInfo)) {
       this.setState({ loading: false });
     } else if (newProps.playbackInfo) {
       this.setState({
         loading: false,
         active: true,
-        playing: this.props.playbackInfo.is_playing,
-        track: this.props.playbackInfo,
+        playing: newProps.playbackInfo.is_playing,
+        track: newProps.playbackInfo,
         progress_ms_offset: 0
       });
+
+      if (newProps.playbackInfo.is_playing) {
+        this.progressInterval = setInterval(function () {
+          this.setState({ progress_ms_offset: this.state.progress_ms_offset + 500 });
+        }.bind(this), 500);
+      }
     }
+  }
+
+  updateCurrentlyPlaying() {
+    var self = this;
+    getCurrentlyPlaying(this.props.token).then((data) => {
+      this.props.updatePlaybackStatus(data);
+    });
   }
 
   render() {
@@ -68,8 +75,8 @@ class Player extends Component {
   }
 
   renderTrack() {
-    var track = this.state.track.item;
-    var img = track.album.images.find((element) => {
+    var trackItem = this.state.track.item;
+    var img = trackItem.album.images.find((element) => {
       return element.height < (window.innerHeight / 2) &&
         element.width < (window.innerWidth / 2)
     });
@@ -83,12 +90,12 @@ class Player extends Component {
           <Grid.Column columns={1}>
             <div>
               <img src={img.url} />
-              <h2>{track.name}</h2>
-              <h3>{this.renderArtists(track.artists)}</h3>
+              <h2>{trackItem.name}</h2>
+              <h3>{this.renderArtists(trackItem.artists)}</h3>
             </div>
           </Grid.Column>
         </Grid.Row>
-        {this.renderTrackStatus(track)}
+        {this.renderTrackStatus(trackItem)}
       </Grid>
     );
   }
@@ -99,17 +106,26 @@ class Player extends Component {
     );
   }
 
-  renderTrackStatus(track) {
-    var progress = ((this.state.track.progress_ms + this.state.progress_ms_offset) / this.state.track.item.duration_ms) * 100;
+  renderTrackStatus(trackItem) {
+    var progress = ((this.state.track.progress_ms + this.state.progress_ms_offset) / trackItem.duration_ms) * 100;
 
     return (<Grid.Row columns={1}>
-      <Grid.Column style={{ width: '100%' }}>
-        <Icon name={this.state.playing ? 'play' : 'pause'} size="large" />
-      </Grid.Column>
+      {this.renderPlaybackStatus()}
       <Grid.Column style={{ width: '100%' }}>
         <Progress percent={progress} active={this.state.playing} size="small" />
       </Grid.Column>
     </Grid.Row>)
+  }
+
+  renderPlaybackStatus() {
+    if (this.state.playing) {
+      return null;
+    }
+    return (
+      <Grid.Column style={{ width: '100%' }}>
+        <Icon name="pause" size="large" />
+      </Grid.Column>
+    );
   }
 
   renderIdlePlayer() {
