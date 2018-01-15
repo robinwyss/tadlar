@@ -8,6 +8,7 @@ import { getCurrentlyPlaying } from '../../api/spotify'
 import { spotifyConstants } from '../../constants'
 import _ from 'lodash'
 import { spotifyActions } from '../../actions'
+import { ArtistInfo } from './components/artistInfo'
 
 class Player extends Component {
 
@@ -86,13 +87,16 @@ class Player extends Component {
         textAlign='center'
         style={{ height: '100%' }}
         verticalAlign='middle'>
-        <Grid.Row>
-          <Grid.Column columns={1}>
+        <Grid.Row columns={2}>
+          <Grid.Column>
             <div>
               <img src={img.url} />
               <h2>{trackItem.name}</h2>
               <h3>{this.renderArtists(trackItem.artists)}</h3>
             </div>
+          </Grid.Column>
+          <Grid.Column>
+            <ArtistInfo name={trackItem.artists[0].name} />
           </Grid.Column>
         </Grid.Row>
         {this.renderTrackStatus(trackItem)}
