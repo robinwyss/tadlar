@@ -36,7 +36,7 @@ export const searchArtist = name => {
 
 export const lookupArtist = id => {
     console.log('looking up' + id)
-    return fetch('https://musicbrainz.org/ws/2/artist/' + id + '?fmt=json&inc=url-rels&area-rels')
+    return fetch('https://musicbrainz.org/ws/2/artist/' + id + '?fmt=json&inc=url-rels+area-rels')
         .then(function (result) {
             return result.json();
         });
