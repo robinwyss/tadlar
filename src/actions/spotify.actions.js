@@ -1,4 +1,5 @@
 import { spotifyConstants } from '../constants'
+import { getCurrentlyPlaying } from '../api/spotify'
 
 const updatePlaybackStatus = (playbackInfo) => {
     return {

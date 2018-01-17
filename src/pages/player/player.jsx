@@ -3,11 +3,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import Blur from 'react-blur';
 import { withRouter } from "react-router-dom"
-import { Grid, Icon, Progress, Segment, Loader } from 'semantic-ui-react';
+import { Grid, Loader } from 'semantic-ui-react';
 import { getCurrentlyPlaying } from '../../api/spotify'
 import { spotifyConstants } from '../../constants'
 import _ from 'lodash'
 import { spotifyActions } from '../../actions'
+import { Track, TrackStatus } from './components'
 
 class Player extends Component {
 
@@ -76,11 +77,6 @@ class Player extends Component {
 
   renderTrack() {
     var trackItem = this.state.track.item;
-    var img = trackItem.album.images.find((element) => {
-      return element.height < (window.innerHeight / 2) &&
-        element.width < (window.innerWidth / 2)
-    });
-
     return (
       <Grid
         textAlign='center'
@@ -88,46 +84,15 @@ class Player extends Component {
         verticalAlign='middle'>
         <Grid.Row>
           <Grid.Column columns={1}>
-            <div>
-              <img src={img.url} />
-              <h2>{trackItem.name}</h2>
-              <h3>{this.renderArtists(trackItem.artists)}</h3>
-            </div>
+            <Track track={this.state.track.item} />
           </Grid.Column>
         </Grid.Row>
-        {this.renderTrackStatus(trackItem)}
+        <TrackStatus track={this.state.track} playing={this.state.playing} />
       </Grid>
     );
   }
 
-  renderArtists(artists) {
-    return (
-      <span>{artists.map((a) => a.name).join(', ')}</span>
-    );
-  }
-
-  renderTrackStatus(trackItem) {
-    var progress = ((this.state.track.progress_ms + this.state.progress_ms_offset) / trackItem.duration_ms) * 100;
-
-    return (<Grid.Row columns={1}>
-      {this.renderPlaybackStatus()}
-      <Grid.Column style={{ width: '100%' }}>
-        <Progress percent={progress} active={this.state.playing} size="small" />
-      </Grid.Column>
-    </Grid.Row>)
-  }
-
-  renderPlaybackStatus() {
-    if (this.state.playing) {
-      return null;
-    }
-    return (
-      <Grid.Column style={{ width: '100%' }}>
-        <Icon name="pause" size="large" />
-      </Grid.Column>
-    );
-  }
-
+  
   renderIdlePlayer() {
     return (<Grid
       textAlign='center'

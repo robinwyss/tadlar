@@ -8,7 +8,7 @@ export const searchArtist = (name) => {
         })
         .then(function (artistResult) {
             if (artistResult.exactMatch) {
-                reurn lookupArtist(data.artist.id)
+                return lookupArtist(data.artist.id)
             } else {
                 return data;
             }
@@ -25,5 +25,5 @@ export const lookupArtist = (id) => {
 }
 
 export const areaLookup = (id) => {
-    
+
 }
