@@ -9,6 +9,7 @@ import { spotifyConstants } from '../../constants'
 import _ from 'lodash'
 import { spotifyActions } from '../../actions'
 import { Track, TrackStatus } from './components'
+import { ArtistInfo } from './components/artistInfo'
 
 class Player extends Component {
 
@@ -82,9 +83,12 @@ class Player extends Component {
         textAlign='center'
         style={{ height: '100%' }}
         verticalAlign='middle'>
-        <Grid.Row>
-          <Grid.Column columns={1}>
+        <Grid.Row columns={2}>
+          <Grid.Column >
             <Track track={this.state.track.item} />
+          </Grid.Column>
+          <Grid.Column>
+            <ArtistInfo name={trackItem.artists[0].name} />
           </Grid.Column>
         </Grid.Row>
         <TrackStatus track={this.state.track} playing={this.state.playing} />
@@ -92,7 +96,7 @@ class Player extends Component {
     );
   }
 
-  
+
   renderIdlePlayer() {
     return (<Grid
       textAlign='center'
