@@ -75,7 +75,7 @@ export class ArtistInfo extends Component {
             _.get(beginArea, 'Subdivision'),
             _.get(beginArea, 'Country')
         ].filter(e => e); //removed undefined values
-        var beginArea = _.join(beginArea, ', ');
+        var beginArea = _.join(beginAreaPlaces, ', ');
         if (!country) {
             return (<div>beginArea</div>)
         } else if (!beginArea) {

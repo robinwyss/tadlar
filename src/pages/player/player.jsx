@@ -23,12 +23,12 @@ class Player extends Component {
     this.updateInterval = setInterval(this.updateCurrentlyPlaying.bind(this), 5000);
   }
 
-  componentWillUnmount() {
-    clearInterval(this.updateInterval)
-  }
+  // componentWillUnmount() {
+  //   clearInterval(this.updateInterval)
+  // }
 
   componentWillReceiveProps(newProps) {
-    clearInterval(this.progressInterval);
+    // clearInterval(this.progressInterval);
     if (_.isEmpty(newProps.playbackInfo)) {
       this.setState({ loading: false });
     } else if (newProps.playbackInfo) {
@@ -36,15 +36,15 @@ class Player extends Component {
         loading: false,
         active: true,
         playing: newProps.playbackInfo.is_playing,
-        track: newProps.playbackInfo,
-        progress_ms_offset: 0
+        track: newProps.playbackInfo
+        // progress_ms_offset: 0
       });
 
-      if (newProps.playbackInfo.is_playing) {
-        this.progressInterval = setInterval(function () {
-          this.setState({ progress_ms_offset: this.state.progress_ms_offset + 500 });
-        }.bind(this), 500);
-      }
+      // if (newProps.playbackInfo.is_playing) {
+      //   this.progressInterval = setInterval(function () {
+      //     this.setState({ progress_ms_offset: this.state.progress_ms_offset + 500 });
+      //   }.bind(this), 500);
+      // }
     }
   }
 
