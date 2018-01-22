@@ -1,4 +1,7 @@
-# simple-react-app
+# Tadlar
+Simple web app that shows information from Music Brainz for the current playing track on Spotify
+
+## start
 
 `npm start` to start dev server with hot reload, it's live on `localhost:3000`.
 
