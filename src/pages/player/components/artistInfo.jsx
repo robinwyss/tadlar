@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { searchArtist, getArea } from '../../../api/musicbrainz'
 import _ from 'lodash'
 import { Icon } from 'semantic-ui-react';
+import { Relations } from './relations';
+import { Area } from './area';
+import { WikipediaBio } from './wikipediaBio';
 
 export class ArtistInfo extends Component {
 
@@ -53,76 +56,21 @@ export class ArtistInfo extends Component {
                         {this.state.artistData.artist.name}
                     </div>
                     <div>
-                        {this.renderArea(this.state.area, this.state.beginArea)}
+                        <Area area={this.state.area} beginarea={this.state.beginArea} />
                     </div>
                     <div>
-                        {this.renderLinks(this.state.artistData.artist.relations)}
+                        <Relations relations={this.state.artistData.artist.relations} />
+                    </div>
+                    <div>
+                        <WikipediaBio relations={this.state.artistData.artist.relations} />
                     </div>
                 </div>
             );
         } else {
             return (<div>multiple matches</div>)
-         }
-    }
-
-    renderArea(area, beginArea) {
-        if (!area && !beginArea) {
-            return null;
-        }
-        var country = _.get(area, 'Country', '');
-        var beginAreaPlaces = [
-            _.get(beginArea, 'City'),
-            _.get(beginArea, 'Subdivision'),
-            _.get(beginArea, 'Country')
-        ].filter(e => e); //removed undefined values
-        var beginArea = _.join(beginAreaPlaces, ', ');
-        if (!country) {
-            return (<div>beginArea</div>)
-        } else if (!beginArea) {
-            return (<div>{country}</div>)
-        } else {
-            return (<div>
-                {country} ({beginArea})
-       </div>)
         }
     }
 
-    renderLinks(relations) {
-        if (!relations) {
-            return null;
-        }
-        return (
-            <div>{relations.map(rel => {
-                switch (rel.type) {
-                    case "official homepage": return this.renderIcon('home', rel);
-                    case "soundcloud": return this.renderIcon('soundcloud', rel);
-                    case "wikipedia": return this.renderIcon('wikipedia', rel);
-                    case "youtube play": return this.renderIcon('youtube play', rel);
-                    case "streaming music": return this.renderStreamingMusic(rel);
-                    case "social network": return this.renderSocialNetworkUrl(rel);
-                }
-            })}</div>)
-    }
+    
 
-    renderSocialNetworkUrl(relation) {
-        if (relation.url.resource.includes('twitter.com')) {
-            return this.renderIcon('twitter', relation);
-        } else if (relation.url.resource.includes('facebook.com')) {
-            return this.renderIcon('facebook', relation);
-        } if (relation.url.resource.includes('instagram.com')) {
-            return this.renderIcon('instagram', relation);
-        }
-        return null
-    }
-
-    renderStreamingMusic(relation) {
-        if (relation.url.resource.includes('spotify.com')) {
-            return this.renderIcon('spotify', relation);
-        }
-        return null
-    }
-
-    renderIcon(name, rel) {
-        return (<a href={rel.url.resource} key={rel.url.resource} ><Icon name={name} size="large" /></a>)
-    }
 }
