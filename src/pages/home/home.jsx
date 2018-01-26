@@ -5,7 +5,7 @@ export class Home extends Component {
 
   login() {
     var client_id = 'af9114318d244a4d957b854e7e124bce';
-    var redirectUri = 'http://localhost:3000/callback';
+    var redirectUri = window.location.origin + '/callback';
     var scope = encodeURIComponent('user-read-private user-read-playback-state');
     var state = 'random';
     var url = 
