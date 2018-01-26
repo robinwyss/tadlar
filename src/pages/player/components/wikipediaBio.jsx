@@ -27,7 +27,7 @@ export class WikipediaBio extends Component {
         if (_.get(this, 'state.wikiData')) {
             var key = _.findKey(this.state.wikiData);
             return (
-                <div dangerouslySetInnerHTML={{__html: this.state.wikiData[key].extract}} />
+                <div style={{margin: '20px 0px'}} dangerouslySetInnerHTML={{__html: this.state.wikiData[key].extract}} />
             );
         }
         return null;

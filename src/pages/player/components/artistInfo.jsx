@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { searchArtist, getArea } from '../../../api/musicbrainz'
 import _ from 'lodash'
-import { Icon } from 'semantic-ui-react';
+import { Icon, Header, Divider, Card } from 'semantic-ui-react';
 import { Relations } from './relations';
 import { Area } from './area';
 import { WikipediaBio } from './wikipediaBio';
@@ -51,19 +51,21 @@ export class ArtistInfo extends Component {
         }
         if (this.state.artistData.exactMatch) {
             return (
-                <div>
-                    <div>
-                        {this.state.artistData.artist.name}
-                    </div>
-                    <div>
-                        <Area area={this.state.area} beginarea={this.state.beginArea} />
-                    </div>
-                    <div>
-                        <Relations relations={this.state.artistData.artist.relations} />
-                    </div>
-                    <div>
-                        <WikipediaBio relations={this.state.artistData.artist.relations} />
-                    </div>
+                <div style={{ textAlign: 'left', margin: 20 }}>
+                    <Card style={{ textAlign: 'left', padding: 10, width: '70%' }}>
+                        <Card.Content>
+                            <Card.Header>{this.state.artistData.artist.name}</Card.Header>
+                            <Card.Meta>
+                                <Area area={this.state.area} beginarea={this.state.beginArea} />
+                            </Card.Meta>
+                            <Card.Description>
+                                <WikipediaBio relations={this.state.artistData.artist.relations} />
+                            </Card.Description>
+                            <Card.Content extra>
+                                <Relations relations={this.state.artistData.artist.relations} />
+                            </Card.Content>
+                        </Card.Content>
+                    </Card>
                 </div>
             );
         } else {
@@ -71,6 +73,6 @@ export class ArtistInfo extends Component {
         }
     }
 
-    
+
 
 }

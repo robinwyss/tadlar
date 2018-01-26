@@ -28,12 +28,16 @@ export class TrackStatus extends Component {
         var trackItem = this.props.track.item;
         var progress = ((this.props.track.progress_ms + this.state.progress_ms_offset) / trackItem.duration_ms) * 100;
 
-        return (<Grid.Row columns={1}>
-            {this.renderPlaybackStatus()}
-            <Grid.Column style={{ width: '100%' }}>
-                <Progress percent={progress} active={this.props.playing} size="small" />
-            </Grid.Column>
-        </Grid.Row>)
+        return (<Grid verticalAlign='middle'>
+            <Grid.Row columns={1}>
+                <Grid.Column style={{ width: '100%', padding: '20px 0px' }}>
+                    {this.renderPlaybackStatus()}
+                </Grid.Column>
+                <Grid.Column style={{ width: '100%' }}>
+                    <Progress percent={progress} active={this.props.playing} size="small" />
+                </Grid.Column>
+            </Grid.Row>
+        </Grid>)
     }
 
     renderPlaybackStatus() {
@@ -41,9 +45,7 @@ export class TrackStatus extends Component {
             return null;
         }
         return (
-            <Grid.Column style={{ width: '100%' }}>
-                <Icon name="pause" size="large" />
-            </Grid.Column>
+            <Icon name="pause" size="large" />
         );
     }
 

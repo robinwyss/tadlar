@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon } from 'semantic-ui-react';
+import { Icon, Label } from 'semantic-ui-react';
 
 export class Relations extends Component {
 
@@ -43,6 +43,8 @@ export class Relations extends Component {
     }
 
     renderIcon(name, rel) {
-        return (<a href={rel.url.resource} target="_blank" key={rel.url.resource} ><Icon name={name} size="large" /></a>)
+        return (<Label key={rel.url.resource}>
+            <a href={rel.url.resource} target="_blank"  ><Icon name={name} size="large" /> </a>
+        </Label>)
     }
 }

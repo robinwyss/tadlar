@@ -83,15 +83,25 @@ class Player extends Component {
         textAlign='center'
         style={{ height: '100%' }}
         verticalAlign='middle'>
-        <Grid.Row columns={2}>
-          <Grid.Column >
-            <Track track={this.state.track.item} />
-          </Grid.Column>
+        <Grid.Row>
           <Grid.Column>
-            <ArtistInfo name={trackItem.artists[0].name} />
+            <Grid>
+              <Grid.Row columns={2}>
+                <Grid.Column >
+                  <Track track={this.state.track.item} />
+                </Grid.Column>
+                <Grid.Column>
+                  <ArtistInfo name={trackItem.artists[0].name} />
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
           </Grid.Column>
         </Grid.Row>
-        <TrackStatus track={this.state.track} playing={this.state.playing} />
+        <Grid.Row>
+          <Grid.Column>
+            <TrackStatus track={this.state.track} playing={this.state.playing} />
+          </Grid.Column>
+        </Grid.Row>
       </Grid>
     );
   }

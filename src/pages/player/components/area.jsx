@@ -1,29 +1,32 @@
 import React, { Component } from 'react';
+import { Icon } from 'semantic-ui-react';
 
 export class Area extends Component {
-    render(){
-        return this.renderArea(this.props.area, this.props.beginArea);
+
+    render() {
+        if (!this.props.area && !this.props.beginArea) {
+            return null;
+        }
+        return (<div>
+            <Icon name='globe' />
+            {this.renderArea(this.props.area, this.props.beginArea)}
+        </div>);
     }
 
     renderArea(area, beginArea) {
-        if (!area && !beginArea) {
-            return null;
-        }
-        // var country = _.get(area, 'Country', '');
         var combinedArea = this.combineArea(area);
         var combineBeginArea = this.combineArea(beginArea);
+
         if (!combinedArea) {
-            return (<div>combineBeginArea</div>)
+            return combineBeginArea
         } else if (!combineBeginArea) {
-            return (<div>{combinedArea}</div>)
+            return combinedArea
         } else {
-            return (<div>
-                {combinedArea} ({combineBeginArea})
-       </div>)
+            return combinedArea + ' (' +combineBeginArea +')';
         }
     }
 
-    combineArea(area){
+    combineArea(area) {
         var areaArray = [
             _.get(area, 'City'),
             _.get(area, 'Subdivision'),
